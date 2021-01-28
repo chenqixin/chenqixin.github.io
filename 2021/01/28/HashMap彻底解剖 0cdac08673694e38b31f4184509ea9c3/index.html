@@ -20,28 +20,40 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta property="og:type" content="website">
+  <meta name="description" content="HashMap彻底解剖&#x2F;概念&#x2F;Hash一般翻译做“散列”，也有直接音译为“哈希”的，就是把任意长度的输入，通过散列算法，变换成固定长度的输出，该输出就是散列值 基本特性根据同一散列函数计算出的散列值如果不同，那么输入值肯定也不同。但是，根据同一散列函数计算出的散列值如果相同，输入值不一定相同 碰撞两个不同的输入值，根据同一散列函数计算出的散列值相同的现象叫做碰撞 常见的解决碰撞的方法有以下几种：">
+<meta property="og:type" content="article">
 <meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://example.com/index.html">
+<meta property="og:url" content="http://example.com/2021/01/28/HashMap%E5%BD%BB%E5%BA%95%E8%A7%A3%E5%89%96%200cdac08673694e38b31f4184509ea9c3/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="HashMap彻底解剖&#x2F;概念&#x2F;Hash一般翻译做“散列”，也有直接音译为“哈希”的，就是把任意长度的输入，通过散列算法，变换成固定长度的输出，该输出就是散列值 基本特性根据同一散列函数计算出的散列值如果不同，那么输入值肯定也不同。但是，根据同一散列函数计算出的散列值如果相同，输入值不一定相同 碰撞两个不同的输入值，根据同一散列函数计算出的散列值相同的现象叫做碰撞 常见的解决碰撞的方法有以下几种：">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2021/01/28/HashMap%E5%BD%BB%E5%BA%95%E8%A7%A3%E5%89%96%200cdac08673694e38b31f4184509ea9c3/HashMap%E5%BD%BB%E5%BA%95%E8%A7%A3%E5%89%96%200cdac08673694e38b31f4184509ea9c3/hashMap.jpeg">
+<meta property="og:image" content="http://example.com/2021/01/28/HashMap%E5%BD%BB%E5%BA%95%E8%A7%A3%E5%89%96%200cdac08673694e38b31f4184509ea9c3/HashMap%E5%BD%BB%E5%BA%95%E8%A7%A3%E5%89%96%200cdac08673694e38b31f4184509ea9c3.jpg">
+<meta property="og:image" content="http://example.com/2021/01/28/HashMap%E5%BD%BB%E5%BA%95%E8%A7%A3%E5%89%96%200cdac08673694e38b31f4184509ea9c3/HashMap%E5%BD%BB%E5%BA%95%E8%A7%A3%E5%89%96%200cdac08673694e38b31f4184509ea9c3/16.jpg">
+<meta property="og:image" content="http://example.com/2021/01/28/HashMap%E5%BD%BB%E5%BA%95%E8%A7%A3%E5%89%96%200cdac08673694e38b31f4184509ea9c3/HashMap%E5%BD%BB%E5%BA%95%E8%A7%A3%E5%89%96%200cdac08673694e38b31f4184509ea9c3/Untitled.png">
+<meta property="og:image" content="http://example.com/2021/01/28/HashMap%E5%BD%BB%E5%BA%95%E8%A7%A3%E5%89%96%200cdac08673694e38b31f4184509ea9c3/HashMap%E5%BD%BB%E5%BA%95%E8%A7%A3%E5%89%96%200cdac08673694e38b31f4184509ea9c3/Untitled%201.png">
+<meta property="og:image" content="http://example.com/2021/01/28/HashMap%E5%BD%BB%E5%BA%95%E8%A7%A3%E5%89%96%200cdac08673694e38b31f4184509ea9c3/HashMap%E5%BD%BB%E5%BA%95%E8%A7%A3%E5%89%96%200cdac08673694e38b31f4184509ea9c3/Untitled%202.png">
+<meta property="og:image" content="http://example.com/2021/01/28/HashMap%E5%BD%BB%E5%BA%95%E8%A7%A3%E5%89%96%200cdac08673694e38b31f4184509ea9c3/HashMap%E5%BD%BB%E5%BA%95%E8%A7%A3%E5%89%96%200cdac08673694e38b31f4184509ea9c3/Untitled%203.png">
+<meta property="article:published_time" content="2021-01-27T22:09:26.000Z">
+<meta property="article:modified_time" content="2021-01-27T22:09:26.000Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2021/01/28/HashMap%E5%BD%BB%E5%BA%95%E8%A7%A3%E5%89%96%200cdac08673694e38b31f4184509ea9c3/HashMap%E5%BD%BB%E5%BA%95%E8%A7%A3%E5%89%96%200cdac08673694e38b31f4184509ea9c3/hashMap.jpeg">
 
-<link rel="canonical" href="http://example.com/">
+<link rel="canonical" href="http://example.com/2021/01/28/HashMap%E5%BD%BB%E5%BA%95%E8%A7%A3%E5%89%96%200cdac08673694e38b31f4184509ea9c3/">
 
 
 <script id="page-configurations">
   // https://hexo.io/docs/variables.html
   CONFIG.page = {
     sidebar: "",
-    isHome : true,
-    isPost : false,
+    isHome : false,
+    isPost : true,
     lang   : 'en'
   };
 </script>
 
-  <title>Hexo</title>
+  <title> | Hexo</title>
   
 
 
@@ -149,9 +161,10 @@
         <div class="content-wrap">
           
 
-          <div class="content index posts-expand">
+          <div class="content post posts-expand">
             
-      
+
+    
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
@@ -167,10 +180,9 @@
       <meta itemprop="name" content="Hexo">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
+        <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2021/01/28/HashMap%E5%BD%BB%E5%BA%95%E8%A7%A3%E5%89%96%200cdac08673694e38b31f4184509ea9c3/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
+        </h1>
 
         <div class="post-meta">
             <span class="post-meta-item">
@@ -193,7 +205,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="HashMap彻底解剖"><a href="#HashMap彻底解剖" class="headerlink" title="HashMap彻底解剖"></a>HashMap彻底解剖</h1><h2 id="概念"><a href="#概念" class="headerlink" title="/概念/"></a>/概念/</h2><h3 id="Hash"><a href="#Hash" class="headerlink" title="Hash"></a>Hash</h3><p>一般翻译做“散列”，也有直接音译为“哈希”的，就是把任意长度的输入，通过散列算法，变换成固定长度的输出，该输出就是散列值</p>
+        <h1 id="HashMap彻底解剖"><a href="#HashMap彻底解剖" class="headerlink" title="HashMap彻底解剖"></a>HashMap彻底解剖</h1><h2 id="概念"><a href="#概念" class="headerlink" title="/概念/"></a>/概念/</h2><h3 id="Hash"><a href="#Hash" class="headerlink" title="Hash"></a>Hash</h3><p>一般翻译做“散列”，也有直接音译为“哈希”的，就是把任意长度的输入，通过散列算法，变换成固定长度的输出，该输出就是散列值</p>
 <h3 id="基本特性"><a href="#基本特性" class="headerlink" title="基本特性"></a>基本特性</h3><p>根据同一散列函数计算出的散列值如果不同，那么输入值肯定也不同。但是，根据同一散列函数计算出的散列值如果相同，输入值不一定相同</p>
 <h3 id="碰撞"><a href="#碰撞" class="headerlink" title="碰撞"></a>碰撞</h3><p>两个不同的输入值，根据同一散列函数计算出的散列值相同的现象叫做碰撞</p>
 <h3 id="常见的解决碰撞的方法有以下几种："><a href="#常见的解决碰撞的方法有以下几种：" class="headerlink" title="常见的解决碰撞的方法有以下几种："></a>常见的解决碰撞的方法有以下几种：</h3><ul>
@@ -262,120 +274,30 @@
 <h2 id="多线程并发访问线程安全"><a href="#多线程并发访问线程安全" class="headerlink" title="/多线程并发访问线程安全/"></a>/多线程并发访问线程安全/</h2><p>/</p>
 <h2 id="JDK1-7-与JDK1-8-对比"><a href="#JDK1-7-与JDK1-8-对比" class="headerlink" title="/JDK1.7 与JDK1.8 对比/"></a>/JDK1.7 与JDK1.8 对比/</h2><p><img src="HashMap%E5%BD%BB%E5%BA%95%E8%A7%A3%E5%89%96%200cdac08673694e38b31f4184509ea9c3/Untitled%203.png" alt="HashMap%E5%BD%BB%E5%BA%95%E8%A7%A3%E5%89%96%200cdac08673694e38b31f4184509ea9c3/Untitled%203.png"></p>
 
-      
     </div>
 
     
     
     
+
       <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/26/Android%E7%9F%A5%E8%AF%86%E4%BD%93%E7%B3%BB/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/01/26/Android%E7%9F%A5%E8%AF%86%E4%BD%93%E7%B3%BB/" class="post-title-link" itemprop="url">Android完整知识体系</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-01-26 04:13:28" itemprop="dateCreated datePublished" datetime="2021-01-26T04:13:28+08:00">2021-01-26</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-01-21 16:17:17" itemprop="dateModified" datetime="2021-01-21T16:17:17+08:00">2021-01-21</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E7%B4%AF/" itemprop="url" rel="index"><span itemprop="name">技术积累</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="Java相关"><a href="#Java相关" class="headerlink" title="/Java相关/"></a>/Java相关/</h2><ul>
-<li>Java Object类方法</li>
-<li>容器集合（HashMap、HashSet、LinkedList，ArrayList，HashSet等）</li>
-<li>HashMap原理，Hash冲突，并发集合，线程安全集合及实现原理</li>
-<li>HashMap 和 HashTable 区别</li>
-<li>HashCode 作用，如何重载hashCode方法</li>
-<li>ArrayList与LinkList区别与联系</li>
-<li>设计模式（六大基本原则）</li>
-<li>Java 中引用类型都有哪些？</li>
-<li>Java 的泛型</li>
-<li>String、StringBuffer 和 StringBuilder 的区别</li>
-<li>关键字 final 和 static 是怎么使用的</li>
-<li>接口、抽象类的区别</li>
-<li>什么是重载，什么是重写，有什么区别？</li>
-<li>说说你对Java堆栈的理解？</li>
-<li>单例模式，常见的有几种？</li>
-<li>类加载方案</li>
-<li>什么是线程池，如何使用？为什么要使用线程池？</li>
-<li>垃圾回收机制GC
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/01/26/Android%E7%9F%A5%E8%AF%86%E4%BD%93%E7%B3%BB/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
         
-      
-    </div>
 
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/01/26/Android%E7%9F%A5%E8%AF%86%E4%BD%93%E7%B3%BB/" rel="prev" title="Android完整知识体系">
+      <i class="fa fa-chevron-left"></i> Android完整知识体系
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
       </footer>
+    
   </article>
   
   
-  
-
-
   
 
 
@@ -428,6 +350,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#HashMap%E5%BD%BB%E5%BA%95%E8%A7%A3%E5%89%96"><span class="nav-number">1.</span> <span class="nav-text">HashMap彻底解剖</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E5%BF%B5"><span class="nav-number">1.1.</span> <span class="nav-text">&#x2F;概念&#x2F;</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Hash"><span class="nav-number">1.1.1.</span> <span class="nav-text">Hash</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E7%89%B9%E6%80%A7"><span class="nav-number">1.1.2.</span> <span class="nav-text">基本特性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A2%B0%E6%92%9E"><span class="nav-number">1.1.3.</span> <span class="nav-text">碰撞</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E7%9A%84%E8%A7%A3%E5%86%B3%E7%A2%B0%E6%92%9E%E7%9A%84%E6%96%B9%E6%B3%95%E6%9C%89%E4%BB%A5%E4%B8%8B%E5%87%A0%E7%A7%8D%EF%BC%9A"><span class="nav-number">1.1.4.</span> <span class="nav-text">常见的解决碰撞的方法有以下几种：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HashMap%E9%87%8C%E9%9D%A2%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E9%9D%99%E6%80%81%E5%86%85%E9%83%A8%E7%B1%BBEntry%EF%BC%8C%E5%85%B6%E9%87%8D%E8%A6%81%E7%9A%84%E5%B1%9E%E6%80%A7%E6%9C%89-key-value-next%EF%BC%8Chash"><span class="nav-number">1.1.5.</span> <span class="nav-text">HashMap里面实现一个静态内部类Entry，其重要的属性有 key , value, next，hash</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HashMap%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="nav-number">1.2.</span> <span class="nav-text">HashMap的数据结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#HashMap%E9%87%8C%E9%9D%A2%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E9%9D%99%E6%80%81%E5%86%85%E9%83%A8%E7%B1%BBEntry%EF%BC%8C%E5%85%B6%E9%87%8D%E8%A6%81%E7%9A%84%E5%B1%9E%E6%80%A7%E6%9C%89-key-value-next%EF%BC%8Chash-1"><span class="nav-number">1.2.1.</span> <span class="nav-text">HashMap里面实现一个静态内部类Entry，其重要的属性有 key , value, next，hash</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%93%88%E5%B8%8C%E5%87%BD%E6%95%B0"><span class="nav-number">1.3.</span> <span class="nav-text">&#x2F;哈希函数&#x2F;</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#HashMap-%E5%93%88%E5%B8%8C%E5%87%BD%E6%95%B0%E6%AD%A5%E9%AA%A4"><span class="nav-number">1.3.1.</span> <span class="nav-text">HashMap 哈希函数步骤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BB%93%EF%BC%9A"><span class="nav-number">1.3.2.</span> <span class="nav-text">总结：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%93%88%E5%B8%8C%E5%86%B2%E7%AA%81"><span class="nav-number">1.4.</span> <span class="nav-text">&#x2F;哈希冲突&#x2F;</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BD%AC%E7%BA%A2%E9%BB%91%E6%A0%91%E7%9A%84%E9%99%90%E5%88%B6"><span class="nav-number">1.4.1.</span> <span class="nav-text">转红黑树的限制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E6%95%B0%E7%BB%84%E2%89%A564%E7%9A%84%E6%9D%A1%E4%BB%B6%E6%89%8D%E4%BC%9A%E8%BD%AC%E5%8C%96%E7%BA%A2%E9%BB%91%E6%A0%91%EF%BC%9F"><span class="nav-number">1.4.2.</span> <span class="nav-text">为什么数组≥64的条件才会转化红黑树？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%93%BE%E8%A1%A8%E2%89%A58%E6%89%8D%E4%BC%9A%E8%BD%AC%E5%8C%96%E4%B8%BA%E7%BA%A2%E9%BB%91%E6%A0%91%EF%BC%9F"><span class="nav-number">1.4.3.</span> <span class="nav-text">为什么链表≥8才会转化为红黑树？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%A9%E5%AE%B9%E6%96%B9%E6%A1%88"><span class="nav-number">1.5.</span> <span class="nav-text">&#x2F;扩容方案&#x2F;</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A3%85%E8%BD%BD%E5%9B%A0%E5%AD%90-HashMap%E4%B8%AD%E8%8A%82%E7%82%B9%E6%95%B0-%E6%95%B0%E7%BB%84%E9%95%BF%E5%BA%A6"><span class="nav-number">1.5.1.</span> <span class="nav-text">装载因子&#x3D;HashMap中节点数&#x2F;数组长度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JDK1-7-VS-JDK-1-8"><span class="nav-number">1.5.2.</span> <span class="nav-text">JDK1.7  VS  JDK 1.8</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93%EF%BC%9A"><span class="nav-number">1.5.3.</span> <span class="nav-text">小结：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E6%95%B0%E7%BB%84%E9%95%BF%E5%BA%A6%E6%9C%89%E4%B8%A4%E7%A7%8D%E6%83%85%E5%86%B5%EF%BC%9A"><span class="nav-number">1.5.4.</span> <span class="nav-text">修改数组长度有两种情况：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E8%AE%BF%E9%97%AE%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8"><span class="nav-number">1.6.</span> <span class="nav-text">&#x2F;多线程并发访问线程安全&#x2F;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JDK1-7-%E4%B8%8EJDK1-8-%E5%AF%B9%E6%AF%94"><span class="nav-number">1.7.</span> <span class="nav-text">&#x2F;JDK1.7 与JDK1.8 对比&#x2F;</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
