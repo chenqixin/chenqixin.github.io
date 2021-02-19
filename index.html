@@ -179,7 +179,7 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2021-02-19 01:51:36" itemprop="dateCreated datePublished" datetime="2021-02-19T01:51:36+08:00">2021-02-19</time>
+              <time title="Created: 2021-02-19 02:12:56" itemprop="dateCreated datePublished" datetime="2021-02-19T02:12:56+08:00">2021-02-19</time>
             </span>
 
           
@@ -212,16 +212,16 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">final V putVal(int hash, K key, V value, boolean onlyIfAbsent,</span><br><span class="line">               boolean evict) &#123;</span><br><span class="line">        ....</span><br><span class="line">    if (**(p &#x3D; tab[i &#x3D; (n - 1) &amp; hash]) &#x3D;&#x3D; null**)</span><br><span class="line">        tab[i] &#x3D; newNode(hash, key, value, null);</span><br><span class="line">    else &#123;</span><br><span class="line">          ......</span><br></pre></td></tr></table></figure>
 
 <p>问题1:取模运算不是应该 <strong>hash%length</strong>？？？为什么是<strong>（length-1）&amp;hash</strong>  🙄</p>
-<p><img src="/2021/02/19/HashMap%E5%BD%BB%E5%BA%95%E8%A7%A3%E5%89%96/HashMap%E5%BD%BB%E5%BA%95%E8%A7%A3%E5%89%96%2055d0cce1cf8d42eabd353fa8146d002f.jpg" alt="HashMap%E5%BD%BB%E5%BA%95%E8%A7%A3%E5%89%96%2055d0cce1cf8d42eabd353fa8146d002f.jpg"></p>
 <p><strong>总结</strong>：为了考虑性能，Java总采用按位与操作实现取模操作 <strong>h &amp; (length-1)= hash%length</strong></p>
 <p>问题二：这样位运算碰撞的几率是不是很高？？</p>
-<p><img src="/2021/02/19/HashMap%E5%BD%BB%E5%BA%95%E8%A7%A3%E5%89%96/16.jpg" alt="HashMap%E5%BD%BB%E5%BA%95%E8%A7%A3%E5%89%96%2055d0cce1cf8d42eabd353fa8146d002f/16.jpg"></p>
+<p><img src="/2021/02/19/HashMap%E5%BD%BB%E5%BA%95%E8%A7%A3%E5%89%96/wei.jpg" alt="HashMap%E5%BD%BB%E5%BA%95%E8%A7%A3%E5%89%96%205bcaa9dfb6f641c48f0ffd91fce856e7/wei.jpg"></p>
+<p><img src="/2021/02/19/HashMap%E5%BD%BB%E5%BA%95%E8%A7%A3%E5%89%96/16.jpg" alt="HashMap%E5%BD%BB%E5%BA%95%E8%A7%A3%E5%89%96%205bcaa9dfb6f641c48f0ffd91fce856e7/16.jpg"></p>
 <p>2：<strong>哈希扰动(jdk 1.8)</strong></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">static final int hash(Object key) &#123;</span><br><span class="line">    int h;</span><br><span class="line">    return (key &#x3D;&#x3D; null) ? 0 : (h &#x3D; key.hashCode()) ^ (h &gt;&gt;&gt; 16);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>总结：就是低16位是和高16位进行异或，一般的数组长度都会比较短，取模运算中只有低位参与散列；高位与低位进行异或，让高位也得以参与散列运算，使得散列更加均匀</p>
 <p>如下图</p>
-<p><img src="/2021/02/19/HashMap%E5%BD%BB%E5%BA%95%E8%A7%A3%E5%89%96/Untitled.png" alt="HashMap%E5%BD%BB%E5%BA%95%E8%A7%A3%E5%89%96%2055d0cce1cf8d42eabd353fa8146d002f/Untitled.png"></p>
+<p><img src="/2021/02/19/HashMap%E5%BD%BB%E5%BA%95%E8%A7%A3%E5%89%96/Untitled.png" alt="HashMap%E5%BD%BB%E5%BA%95%E8%A7%A3%E5%89%96%205bcaa9dfb6f641c48f0ffd91fce856e7/Untitled.png"></p>
 <h3 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h3><ol>
 <li><strong>有效避免冲突措施是16位低位和16位高位进行异或，使得散列更加均匀</strong></li>
 <li><strong>取数组下标：位运算代替模运算，使得计算效率更加高效。也是为什么2的倍数的其中一点原因</strong></li>
@@ -240,9 +240,9 @@
 <li>插入到新的数组时候采用的是头插入法，在多线程环境下会形成链表环</li>
 </ul>
 <p>jdk1.8之后进行了优化，原因在于他控制数组的长度始终是2的整数次幂，每次扩展数组都是原来的2倍，带来的好处是key在新的数组的hash结果只有两种：在<strong>原来的位置</strong>，或者在<strong>原来位置+原数组长度</strong></p>
-<p><img src="/2021/02/19/HashMap%E5%BD%BB%E5%BA%95%E8%A7%A3%E5%89%96/Untitled%201.png" alt="HashMap%E5%BD%BB%E5%BA%95%E8%A7%A3%E5%89%96%2055d0cce1cf8d42eabd353fa8146d002f/Untitled%201.png"></p>
+<p><img src="/2021/02/19/HashMap%E5%BD%BB%E5%BA%95%E8%A7%A3%E5%89%96/Untitled%201.png" alt="HashMap%E5%BD%BB%E5%BA%95%E8%A7%A3%E5%89%96%205bcaa9dfb6f641c48f0ffd91fce856e7/Untitled%201.png"></p>
 <p>从图中我们可以看到，扩容重新计算的结果，仅仅取决于高一位的数值。如果高一位是0，那么就是在原位置，而如果是1，则加上原数组的长度。所以在数据迁移的时候只需要判断一个节点的高一位是1 or 0就可以得到他在新数组的位置，而不需要重复hash计算。HashMap把每个链表拆分成两个链表，对应原位置或原位置+原数组长度，再分别插入到新的数组中，保留原来的节点顺序，如下：</p>
-<p><img src="/2021/02/19/HashMap%E5%BD%BB%E5%BA%95%E8%A7%A3%E5%89%96/Untitled%202.png" alt="HashMap%E5%BD%BB%E5%BA%95%E8%A7%A3%E5%89%96%2055d0cce1cf8d42eabd353fa8146d002f/Untitled%202.png"></p>
+<p><img src="/2021/02/19/HashMap%E5%BD%BB%E5%BA%95%E8%A7%A3%E5%89%96/Untitled%202.png" alt="HashMap%E5%BD%BB%E5%BA%95%E8%A7%A3%E5%89%96%205bcaa9dfb6f641c48f0ffd91fce856e7/Untitled%202.png"></p>
 <h3 id="小结："><a href="#小结：" class="headerlink" title="小结："></a>小结：</h3><ol>
 <li>HashMap扩容机制结合了数组长度为2的整数次幂，高效的完成数据迁移，同时能有效避免头插法造成链表环。</li>
 </ol>
@@ -275,7 +275,7 @@
 <li>同一时间只能有一个线程进行读写，限制了并发效率</li>
 </ul>
 <p><strong>ConcurrentHashMap</strong>的设计就是为了解决此问题。他通过降低锁粒度+CAS的方式来提高效率。简单来说，ConcurrentHashMap锁的并不是整个对象，而是一个数组的一个节点</p>
-<p><img src="/2021/02/19/HashMap%E5%BD%BB%E5%BA%95%E8%A7%A3%E5%89%96/Untitled%203.png" alt="HashMap%E5%BD%BB%E5%BA%95%E8%A7%A3%E5%89%96%2055d0cce1cf8d42eabd353fa8146d002f/Untitled%203.png"></p>
+<p><img src="/2021/02/19/HashMap%E5%BD%BB%E5%BA%95%E8%A7%A3%E5%89%96/Untitled%203.png" alt="HashMap%E5%BD%BB%E5%BA%95%E8%A7%A3%E5%89%96%205bcaa9dfb6f641c48f0ffd91fce856e7/Untitled%203.png"></p>
 <p>关于线程安全，还有一个<strong>fast-fail</strong>问题，即快速失败。当使用HashMap的迭代器遍历HashMap时，如果此时HashMap发生了结构性改变，如插入新数据、移除数据、扩容等，那么Iteractor会抛出fast-fail异常，防止出现并发异常，在一定限度上保证了线程安全</p>
 <p>创建Iteractor对象时会记录HashMap的modCount变量，每当HashMap发生结构性改变时，modCount会加1。在迭代时判断HashMap的modCount和自己保存的expectedModCount是否一致即可判断是否发生了结构性改变。</p>
 <h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><ol>
